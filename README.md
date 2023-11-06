@@ -7,7 +7,12 @@ Welcome to the Maze Generator and Solver project, a fun and interactive maze gen
 - **Maze Generation:** Create custom mazes by specifying the width and height.
 - **Interactive Visualization:** Visualize the generated mazes and explore them.
 - **A * Algorithm Solver:** Let the computer solve the maze for you using the A* algorithm.
-- **Responsive:** The project is designed with React, making it a responsive web application.
+
+## Notice
+
+There is no limit to maze size when seting parameters! It can try to generate insanely large mazes witch can break the webpage! Keep it in the range 10 - 100 for best results!
+
+There is still room for improvement, this is something i eneded up creating in a day for practice. Maybe i will return to this to make it neat and a fun iteractive maze game to publish on my [website](https://vukmaric.rs);
 
 ## Usage
 
