@@ -45,8 +45,9 @@ To use this project, follow these steps:
 
 ## Examples
 
-![Maze Example 1](example1.png)
-![Maze Example 2](example2.png)
+<img src="example1.png" width=600> 
+
+<img src="example2.png" width=600>
 
 ## Contributing
 
