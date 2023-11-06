@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# Maze Generator and Solver
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Maze Generator and Solver project, a fun and interactive maze generation and solving tool created using JavaScript and React. This project allows you to generate custom mazes, visualize them, and even find a solution using the A* algorithm.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Maze Generation:** Create custom mazes by specifying the width and height.
+- **Interactive Visualization:** Visualize the generated mazes and explore them.
+- **A* Algorithm Solver:** Let the computer solve the maze for you using the A* algorithm.
+- **Customization:** Set the start and end points for the maze.
+- **Responsive:** The project is designed with React, making it a responsive web application.
 
-### `npm start`
+## Usage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To use this project, follow these steps:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Clone the repository to your local machine:
+```git clone https://github.com/VukMar/maze-generator.git```
 
-### `npm test`
+2. Open the project in your code editor and configure it as needed.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Run the project locally:
 
-### `npm run build`
+```npm install npm start```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Open your web browser and navigate to `http://localhost:3000` to access the application.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+5. Select the dimensions (width and height) for your maze.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+6. Optionally, customize the maze by setting the start and end points.
 
-### `npm run eject`
+7. Click the "Generate Maze" button to create your maze.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+8. Explore the maze interactively or click the "Find Exit" button to let the computer solve it for you.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Examples
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Maze Example 1](example1.png)
+![Maze Example 2](example2.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributing
 
-## Learn More
+Contributions are welcome! If you'd like to improve this project, feel free to fork the repository, make changes, and submit a pull request.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project is licensed under the [MIT License](LICENSE).
 
-### Code Splitting
+Enjoy exploring and solving mazes with the Maze Generator and Solver!
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For any questions or issues, please contact [VukMar](https://github.com/VukMar).
