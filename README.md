@@ -32,11 +32,9 @@ To use this project, follow these steps:
 
 5. Select the dimensions (width and height) for your maze.
 
-6. Optionally, customize the maze by setting the start and end points.
+7. Click the "Generate" button to create your maze.
 
-7. Click the "Generate Maze" button to create your maze.
-
-8. Explore the maze interactively or click the "Find Exit" button to let the computer solve it for you.
+8. Explore the maze interactively or click the "Solve Maze" button to let the computer solve it for you.
 
 ## Examples
 
