@@ -1,28 +1,32 @@
 import React, { useEffect, useState, useRef } from "react";
-import mazeGenerator, {GenerateMaze, MazeGrid} from "./maze-generator";
+import {GenerateMaze} from "./maze-generator";
 import aStar from "./astar";
 import './Maze.css';
 
-function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve}){
+function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotification}){
 
     const [FinalMaze, setFinalMaze] = useState([]);
     const [MazeGenerated, setMazeGenerated] = useState(false);
-    const [Notification, setNotification] = useState('Please enter parameters for the maze!');
-    const [gridSize, setGridSize] = useState(0);
-    const [Solving, setSolving] = useState(false);
+    const [Path, setPath] = useState(null);
+
+    const canvasRef = useRef(null);
+
+    const offscreenCanvas = document.createElement('canvas');
+    const offscreenContext = offscreenCanvas.getContext('2d');
 
 
     //Us effect for generation
     useEffect(()=>{
         if(toGenerate){
+            setPath(null);
             if(!isNaN(Parameters.width) || !isNaN(Parameters.height)){
                 const W = parseInt(Parameters.width);
                 const H = parseInt(Parameters.height);
-                setGridSize(Parameters.width)
                 const MazeBluprint = GenerateMaze(W,H);
                 if(MazeBluprint){
                     setFinalMaze(MazeBluprint);
                     setMazeGenerated(true);
+                    setNotification('MAZE GENERATED!');
                 }else{
                     setNotification(`WIDTH or HEIGHT can't be 0!`);
                 }
@@ -37,73 +41,120 @@ function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve}){
     useEffect(()=>{
         if(toSolve){
             if(MazeGenerated){
-                setSolving(true);
                 SolveMaze();
             }else{
                 setNotification('Maze not generated yet!');
             }
-            setSolve(false);    
-            setSolving(false);
+            setSolve(false);
         }
     },[toSolve])
 
-    function setupStyle(w){
-
-        const top = !w.TopWall? '1px solid transparent' : '1px solid brown'; 
-        const bottom = !w.BottomWall? '1px solid transparent' : '1px solid brown'; 
-        const left = !w.LeftWall? '1px solid transparent' : '1px solid brown';  
-        const right = !w.RightWall? '1px solid transparent' : '1px solid brown';
-        
-        if(w.isPath){
-            return ({borderTop: `${top}`, borderBottom: `${bottom}`, borderLeft: `${left}`, borderRight: `${right}`})
-        }else{
-            return ({borderTop: `${top}`, borderBottom: `${bottom}`, borderLeft: `${left}`, borderRight: `${right}`})
-
-        }
-        
+    function SolveMaze(){
+        setPath(aStar(FinalMaze));
     }
 
-    function drawPath(path){
-        for(var i = 0; i < FinalMaze.length; i++){
-            for(var j = 0; j < FinalMaze[i].length; j++){
-                for(var k = path.length-1; k >= 0; k--){
-                    if(path[k].i === i && path[k].j === j){
-                        FinalMaze[i][j].isPath = true;
+    function drawMaze(){
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        
+        var height = 0;
+        var cellSize = canvas.width/Parameters.width;
+        height = cellSize * Parameters.height;
+        canvas.height = height;
+        // Clear the canvas
+        context.clearRect(0, 0, canvas.width, height);
+        offscreenCanvas.width = canvas.width;
+        offscreenCanvas.height = canvas.height;
+        offscreenContext.clearRect(0, 0, offscreenCanvas.width, height);
+
+        
+        // Loop through the mazeData and draw cells with walls
+        FinalMaze.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                // Draw transparent cell
+                offscreenContext.fillStyle = '#585858'; // Transparent black
+                offscreenContext.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+
+                
+                if (Path) {
+                    offscreenContext.strokeStyle = 'red'; // Line color
+                    offscreenContext.lineWidth = 4; // Line width
+                  
+                    for (let k = 0; k < Path.length; k++) {
+                      const cell = Path[k];
+                  
+                      // Calculate the center of the cell
+                      const centerX = cell.j * cellSize + cellSize / 2;
+                      const centerY = cell.i * cellSize + cellSize / 2;
+                  
+                      if (k === 0) {
+                        // Move to the starting cell
+                        offscreenContext.beginPath();
+                        offscreenContext.moveTo(centerX, centerY);
+                      } else {
+                        // Draw a line to the center of the next cell
+                        offscreenContext.lineTo(centerX, centerY);
+                      }
                     }
+                  
+                    // Finish the Path
+                    offscreenContext.stroke();
                 }
+                
+                // Draw walls
+                offscreenContext.strokeStyle = 'white'; // Wall color
+                offscreenContext.lineWidth = 1; // Adjust line width as needed
+                
+                // Draw top wall
+                    if (cell.TopWall) {
+                    offscreenContext.beginPath();
+                    offscreenContext.moveTo(j * cellSize, i * cellSize);
+                    offscreenContext.lineTo((j + 1) * cellSize, i * cellSize);
+                    offscreenContext.stroke();
+                }
+
+                // Draw right wall
+                if (cell.RightWall) {
+                    offscreenContext.beginPath();
+                    offscreenContext.moveTo((j + 1) * cellSize, i * cellSize);
+                    offscreenContext.lineTo((j + 1) * cellSize, (i + 1) * cellSize);
+                    offscreenContext.stroke();
+                }
+
+                // Draw bottom wall
+                if (cell.BottomWall) {
+                    offscreenContext.beginPath();
+                    offscreenContext.moveTo(j * cellSize, (i + 1) * cellSize);
+                    offscreenContext.lineTo((j + 1) * cellSize, (i + 1) * cellSize);
+                    offscreenContext.stroke();
+                }
+
+                // Draw left wall
+                if (cell.LeftWall) {
+                    offscreenContext.beginPath();
+                    offscreenContext.moveTo(j * cellSize, i * cellSize);
+                    offscreenContext.lineTo(j * cellSize, (i + 1) * cellSize);
+                    offscreenContext.stroke();
+                }
+
+                context.drawImage(offscreenCanvas, 0, 0);
+
+            });
+        });
+    }
+
+    useEffect(() => {
+        if(MazeGenerated){
+            requestAnimationFrame(() =>  {drawMaze()})
+            if(Path){
+                setNotification('Maze Solved!');
             }
         }
-    }
+    }, [FinalMaze,Path]);
 
-    function SolveMaze(){
-        
-        const path = aStar(FinalMaze);
-        if(path){
-            drawPath(path);
-        }else{
-            setNotification('NO PATH FOUND!');
-        }
-    }
 
     return(
-        toGenerate? (
-            <p>GENERATING...</p>
-        ) : Solving? (
-            <p>SOLVING MAZE...</p>
-        ) : MazeGenerated && FinalMaze.length > 0? (
-            <div className="maze" style={{gridTemplateColumns: `repeat(${gridSize}, 1fr)`}}>
-                {FinalMaze.map((h) => (
-                    h.map((w,index) => (
-                        <div key={`cell${index * 8645}`} className="cell" style={setupStyle(w)}>
-                            {w.isStart? 'S' : w.isEnd? 'E' : w.isPath? '·' : ''}
-                        </div>
-                    ) )
-                    
-                ))}
-                    </div>
-        ) : (
-            <p>{Notification}</p>
-        )
+        <canvas className="maze" width={1280} ref={canvasRef}></canvas>
     )
 }
 

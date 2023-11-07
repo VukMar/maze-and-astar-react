@@ -79,48 +79,70 @@ function createStartAndEnd(grid){
     End.j = 0;
     End.side = '';
 
-    var i = 0, j = 0, s = '';
+    var i = 0, j = 0;
 
     for (const side of sides){
         switch(side){
             case 'T':
                 i = 0;
                 j = Math.floor(Math.random() * grid[i].length);
-                s = 'T';
                 break;
             case 'B':
                 i = grid.length - 1;
                 j = Math.floor(Math.random() * grid[i].length);
-                s = 'B';
                 break;
             case 'R':
                 i = Math.floor(Math.random() * grid.length);
                 j = grid[i].length - 1;
-                s = 'R';
                 break;
             case 'L':
                 i = Math.floor(Math.random() * grid.length);
                 j = 0;
-                s = 'L';
                 break;
         }
         if(!Start.isCreated){
             Start.i = i;
             Start.j = j;
             Start.isCreated = true;
-            Start.side = s;
+            Start.side = side;
         }else if(!End.isCreated){
             End.i = i;
             End.j = j;
             End.isCreated = true;
-            End.side = s;
+            End.side = side;
         }
     }
 
     grid[Start.i][Start.j].isStart = true;
+    switch(Start.side){
+        case 'T':
+            grid[Start.i][Start.j].TopWall = false;
+            break;
+        case 'B':
+            grid[Start.i][Start.j].BottomWall = false;
+            break;
+        case 'R':
+            grid[Start.i][Start.j].RightWall = false;
+            break;
+        case 'L':
+            grid[Start.i][Start.j].LeftWall = false;
+            break;
+    }
     grid[End.i][End.j].isEnd = true;
-    console.log(Start);
-    console.log(End);
+    switch(End.side){
+        case 'T':
+            grid[End.i][End.j].TopWall = false;
+            break;
+        case 'B':
+            grid[End.i][End.j].BottomWall = false;
+            break;
+        case 'R':
+            grid[End.i][End.j].RightWall = false;
+            break;
+        case 'L':
+            grid[End.i][End.j].LeftWall = false;
+            break;
+    }
 
 }
 

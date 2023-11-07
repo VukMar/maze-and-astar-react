@@ -1,16 +1,3 @@
 .maze{
-    align-self: flex-start;
-    margin: auto;
-    display: grid;
-    background: #545454;
-}
-
-.cell{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 10px;
-    height: 10px;
-    border: 1px solid brown;
-    font-size: 8px;
+    width: 95%;
 }
