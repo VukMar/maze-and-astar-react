@@ -24,7 +24,7 @@ To use this project, follow these steps:
 1. Clone the repository to your local machine:
 
     ```
-    git clone https://github.com/VukMar/maze-generator.git
+    git clone https://github.com/VukMar/maze-and-astar-react.git
     ```
 
 2. Open the project in your code editor and configure it as needed.
@@ -32,7 +32,8 @@ To use this project, follow these steps:
 3. Run the project locally:
 
     ```
-    npm install npm start
+    npm install 
+    npm start
     ```
 
 4. Open your web browser and navigate to `http://localhost:3000` to access the application.
