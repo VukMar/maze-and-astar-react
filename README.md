@@ -14,9 +14,6 @@ There is no limit to maze size when seting parameters! It can try to generate in
 
 There is still room for improvement, this is something i eneded up creating in a day for practice. Maybe i will return to this to make it neat and a fun interactive maze game to publish on my [website.](https://vukmaric.rs)
 
-The mobile devices have issues when viewing the page! Smaller screen means less viewing area and the maze navigation is harder!
-Will try to enhance the mobile usage in the future.
-
 ## Usage
 
 To use this project, follow these steps:
