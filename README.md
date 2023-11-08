@@ -12,7 +12,7 @@ Welcome to the Maze Generator and Solver project, a fun and interactive maze gen
 
 There is no limit to maze size when seting parameters! It can try to generate insanely large mazes witch can break the webpage! Keep it in the range 10 - 100 for best results!
 
-There is still room for improvement, this is something i eneded up creating in a day for practice. Maybe i will return to this to make it neat and a fun interactive maze game to publish on my [website.](https://vukmaric.rs)
+There is still room for improvement, this is something i eneded up creating for practice. Maybe i will return to this to make it neat and a fun interactive maze game to publish on my [website.](https://vukmaric.rs)
 
 ## Usage
 
