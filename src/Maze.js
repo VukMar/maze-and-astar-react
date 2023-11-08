@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {GenerateMaze} from "./maze-generator";
+import GenerateMaze from "./maze-generator";
 import aStar from "./astar";
 import './Maze.css';
 
@@ -8,17 +8,19 @@ function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotif
     const [FinalMaze, setFinalMaze] = useState([]);
     const [MazeGenerated, setMazeGenerated] = useState(false);
     const [Path, setPath] = useState(null);
+    const [CellSize, setCellSize] = useState(0);
 
     const canvasRef = useRef(null);
+    const canvas = canvasRef.current;
 
     const offscreenCanvas = document.createElement('canvas');
     const offscreenContext = offscreenCanvas.getContext('2d');
-
 
     //Us effect for generation
     useEffect(()=>{
         if(toGenerate){
             setPath(null);
+            setCellSize(40);
             if(!isNaN(Parameters.width) || !isNaN(Parameters.height)){
                 const W = parseInt(Parameters.width);
                 const H = parseInt(Parameters.height);
@@ -41,65 +43,36 @@ function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotif
     useEffect(()=>{
         if(toSolve){
             if(MazeGenerated){
-                SolveMaze();
+                setPath(aStar(FinalMaze));
             }else{
                 setNotification('Maze not generated yet!');
             }
-            setSolve(false);
         }
     },[toSolve])
 
-    function SolveMaze(){
-        setPath(aStar(FinalMaze));
-    }
-
     function drawMaze(){
-        const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        
-        var height = 0;
-        var cellSize = canvas.width/Parameters.width;
-        height = cellSize * Parameters.height;
-        canvas.height = height;
+
+        canvas.width = CellSize*Parameters.width;
+        canvas.height = CellSize*Parameters.height;
         // Clear the canvas
-        context.clearRect(0, 0, canvas.width, height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
         offscreenCanvas.width = canvas.width;
         offscreenCanvas.height = canvas.height;
-        offscreenContext.clearRect(0, 0, offscreenCanvas.width, height);
+        offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
 
-        
         // Loop through the mazeData and draw cells with walls
         FinalMaze.forEach((row, i) => {
             row.forEach((cell, j) => {
-                // Draw transparent cell
-                offscreenContext.fillStyle = '#585858'; // Transparent black
-                offscreenContext.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-
                 
-                if (Path) {
-                    offscreenContext.strokeStyle = 'red'; // Line color
-                    offscreenContext.lineWidth = 4; // Line width
-                  
-                    for (let k = 0; k < Path.length; k++) {
-                      const cell = Path[k];
-                  
-                      // Calculate the center of the cell
-                      const centerX = cell.j * cellSize + cellSize / 2;
-                      const centerY = cell.i * cellSize + cellSize / 2;
-                  
-                      if (k === 0) {
-                        // Move to the starting cell
-                        offscreenContext.beginPath();
-                        offscreenContext.moveTo(centerX, centerY);
-                      } else {
-                        // Draw a line to the center of the next cell
-                        offscreenContext.lineTo(centerX, centerY);
-                      }
-                    }
-                  
-                    // Finish the Path
-                    offscreenContext.stroke();
-                }
+                // Draw cell
+                var CellRect = new Object();
+                CellRect.x = j * CellSize;
+                CellRect.y = i * CellSize;
+                
+                offscreenContext.fillStyle = cell.isStart || cell.isEnd? '#466d1d' : '#585858';
+                offscreenContext.fillRect(CellRect.x, CellRect.y, CellSize, CellSize);
+                
                 
                 // Draw walls
                 offscreenContext.strokeStyle = 'white'; // Wall color
@@ -108,53 +81,82 @@ function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotif
                 // Draw top wall
                     if (cell.TopWall) {
                     offscreenContext.beginPath();
-                    offscreenContext.moveTo(j * cellSize, i * cellSize);
-                    offscreenContext.lineTo((j + 1) * cellSize, i * cellSize);
+                    offscreenContext.moveTo(CellRect.x, CellRect.y);
+                    offscreenContext.lineTo((j + 1) * CellSize, CellRect.y);
                     offscreenContext.stroke();
                 }
 
                 // Draw right wall
                 if (cell.RightWall) {
                     offscreenContext.beginPath();
-                    offscreenContext.moveTo((j + 1) * cellSize, i * cellSize);
-                    offscreenContext.lineTo((j + 1) * cellSize, (i + 1) * cellSize);
+                    offscreenContext.moveTo((j + 1) * CellSize, CellRect.y);
+                    offscreenContext.lineTo((j + 1) * CellSize, (i + 1) * CellSize);
                     offscreenContext.stroke();
                 }
 
                 // Draw bottom wall
                 if (cell.BottomWall) {
                     offscreenContext.beginPath();
-                    offscreenContext.moveTo(j * cellSize, (i + 1) * cellSize);
-                    offscreenContext.lineTo((j + 1) * cellSize, (i + 1) * cellSize);
+                    offscreenContext.moveTo(CellRect.x, (i + 1) * CellSize);
+                    offscreenContext.lineTo((j + 1) * CellSize, (i + 1) * CellSize);
                     offscreenContext.stroke();
                 }
 
                 // Draw left wall
                 if (cell.LeftWall) {
                     offscreenContext.beginPath();
-                    offscreenContext.moveTo(j * cellSize, i * cellSize);
-                    offscreenContext.lineTo(j * cellSize, (i + 1) * cellSize);
+                    offscreenContext.moveTo(CellRect.x, CellRect.y);
+                    offscreenContext.lineTo(CellRect.x, (i + 1) * CellSize);
                     offscreenContext.stroke();
                 }
 
-                context.drawImage(offscreenCanvas, 0, 0);
-
+                
             });
         });
+        if(Path){
+            for (let k = 0; k < Path.length; k++) {
+                offscreenContext.strokeStyle = '#466d1d'; // Wall color
+                offscreenContext.lineWidth = CellSize/2; // Adjust line width as needed
+                const cell = Path[k];
+                const i = cell.i;
+                const j = cell.j;
+                
+                // Calculate the center of the cell
+                const centerX = j * CellSize + CellSize / 2;
+                const centerY = i * CellSize + CellSize / 2;
+                
+                if (k === 0) {
+                    // Move to the starting cell
+                    offscreenContext.beginPath();
+                    offscreenContext.moveTo(centerX, centerY);
+                } else {
+                    // Draw a line to the center of the next cell
+                    offscreenContext.lineTo(centerX, centerY);
+                }
+                
+                // Update the cell on the offscreen buffer
+                offscreenContext.stroke();
+            }
+            
+            // Finish the path
+            offscreenContext.stroke();
+            setNotification('MAZE SOLVED!');
+        } else {
+            if (MazeGenerated && toSolve) setNotification('NO VALID PATH!');
+        }
+        setSolve(false);
+        context.drawImage(offscreenCanvas, 0, 0);
     }
 
     useEffect(() => {
         if(MazeGenerated){
-            requestAnimationFrame(() =>  {drawMaze()})
-            if(Path){
-                setNotification('Maze Solved!');
-            }
+            drawMaze();
         }
-    }, [FinalMaze,Path]);
+    }, [FinalMaze, Path]);
 
 
     return(
-        <canvas className="maze" width={1280} ref={canvasRef}></canvas>
+        <canvas className="maze" ref={canvasRef}></canvas>
     )
 }
 

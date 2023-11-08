@@ -16,7 +16,7 @@ There is still room for improvement, this is something i eneded up creating in a
 
 ## Usage
 
-To use this project, follow these steps:
+To use this project in your own workspace, follow these steps:
 
 1. Clone the repository to your local machine:
 

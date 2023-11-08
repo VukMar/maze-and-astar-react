@@ -1,3 +1,22 @@
-.maze{
-    width: 95%;
+/* Styles for phones (portrait and landscape) */
+@media only screen and (max-width: 480px) {
+    .maze{
+        width: 95%;
+    }
+}
+  
+  /* Styles for tablets (portrait and landscape) */
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+    .maze{
+        width: 95%;
+    }
+}
+  
+  /* Styles for laptops and larger screens */
+@media only screen and (min-width: 1025px) {
+    .maze{
+        min-width: 400px;
+        width: 95%;
+        max-width: 1200px;
+    }
 }

@@ -182,48 +182,6 @@ function GenerateMaze(rows, cols) {
     return grid;
 }
 
-// Functions to make grid usable by the a star
-function showCell(Cell){
-    var CellVisual = new Array(3).fill(null).map(() => new Array(3).fill('█'));
-        if (!Cell.TopWall) {
-            CellVisual[0][1] = ' ';
-        }
-        if (!Cell.RightWall) {
-            CellVisual[1][2] = ' ';
-        }
-        if (!Cell.BottomWall) {
-            CellVisual[2][1] = ' ';
-        }
-        if (!Cell.LeftWall) {
-            CellVisual[1][0] = ' ';
-        }
-        if(Cell.isStart){
-            CellVisual[1][1] = 'S';
-        }else if(Cell.isEnd){
-            CellVisual[1][1] = 'E';
-        }else{
-            CellVisual[1][1] = ' ';
-        }
-
-        return CellVisual;
-}
-
-function MazeGrid (grid){
-    var MazeGridReturn = [];
-    for (let i = 0; i < grid.length; i++) {
-        // Loop through each cell's inner representation
-        for (let k = 0; k < 3; k++) {
-            var gridcol = [];
-            for (let j = 0; j < grid[0].length; j++) {
-                const cell = showCell(grid[i][j]);
-                gridcol.push(...cell[k]);
-            }
-            MazeGridReturn.push(gridcol);
-        }
-    }
-    return MazeGridReturn;
-}
-
-export {MazeGrid, GenerateMaze};
+export default GenerateMaze;
 
 
