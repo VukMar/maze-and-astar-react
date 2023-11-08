@@ -127,6 +127,4 @@ function aStar(grid) {
     return null;
 }
 
-
-
 export default aStar;

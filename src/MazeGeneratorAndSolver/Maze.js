@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import GenerateMaze from "./maze-generator";
-import aStar from "./astar";
+import GenerateMaze from "./GeneratorFunctions";
+import aStar from "./A-Star";
 import './Maze.css';
 
 function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotification}){
