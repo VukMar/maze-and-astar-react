@@ -133,9 +133,6 @@ function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotif
                     // Draw a line to the center of the next cell
                     offscreenContext.lineTo(centerX, centerY);
                 }
-                
-                // Update the cell on the offscreen buffer
-                offscreenContext.stroke();
             }
             
             // Finish the path
@@ -151,9 +148,36 @@ function Maze ({Parameters, toGenerate, setGenerate, toSolve, setSolve, setNotif
     useEffect(() => {
         if(MazeGenerated){
             drawMaze();
+            setCanvasWidth();
         }
     }, [FinalMaze, Path]);
 
+    useEffect(() => {
+
+        window.addEventListener('resize', setCanvasWidth);
+
+        return () => {
+            window.addEventListener('resize', setCanvasWidth);
+        }
+
+    }, [])
+
+    function setCanvasWidth() {
+        if(canvas){
+            var width;
+            console.log('CALCULATING WIDTH FOR CANVAS!')
+            if(window.innerWidth > 520){
+                if(Parameters.width > 25){
+                    width = '90%';
+                }else{
+                    width = '500px';
+                }    
+            }else{
+                width = '90%';
+            }
+            canvas.style.width = width;
+        }
+    }
 
     return(
         <canvas className="maze" ref={canvasRef}></canvas>
